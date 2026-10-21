@@ -321,7 +321,6 @@
     </div>
 
     <script>
-        // Array espanso con più domande, categorie e immagini diverse
         const challenges = [
             { 
                 target: "semafori", 
@@ -352,20 +351,6 @@
                 ]
             },
             { 
-                target: "strisce pedonali", 
-                images: [
-                    "https://images.unsplash.com/photo-1572947517617-37a6b744b11f?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1508672019048-8055876b63e2?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=300&auto=format&fit=crop&q=60"
-                ]
-            },
-            { 
                 target: "biciclette", 
                 images: [
                     "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=300&auto=format&fit=crop&q=60",
@@ -380,17 +365,17 @@
                 ]
             },
             { 
-                target: "idranti antincendio", 
+                target: "strisce pedonali", 
                 images: [
-                    "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1572947517617-37a6b744b11f?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1508672019048-8055876b63e2?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=300&auto=format&fit=crop&q=60",
                     "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&auto=format&fit=crop&q=60",
-                    "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=300&auto=format&fit=crop&q=60"
+                    "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=300&auto=format&fit=crop&q=60"
                 ]
             }
         ];
@@ -398,7 +383,7 @@
         let currentChallengeIndex = 0;
 
         function openCaptchaModal(event) {
-            event.preventDefault(); // Evita il check automatico iniziale
+            event.preventDefault(); // Impedisce il check immediato
             document.getElementById('captcha-modal').style.display = 'flex';
             loadChallenge();
         }
@@ -407,14 +392,14 @@
             const grid = document.getElementById('image-grid');
             const targetText = document.getElementById('challenge-target');
             
-            // Rimuove i vecchi elementi griglia
+            // Pulizia vecchi elementi
             const items = grid.querySelectorAll('.grid-item');
             items.forEach(item => item.remove());
 
             const challenge = challenges[currentChallengeIndex];
             targetText.innerText = challenge.target;
 
-            // Crea le 9 caselle con immagini
+            // Generazione 9 immagini
             challenge.images.forEach((imgUrl) => {
                 const cell = document.createElement('div');
                 cell.className = 'grid-item';
@@ -430,24 +415,29 @@
             const grid = document.getElementById('image-grid');
             const selectedItems = grid.querySelectorAll('.grid-item.selected');
 
-            // Richiede all'utente di selezionare almeno un'immagine per procedere (come il vero reCAPTCHA)
+            // Avviso se non seleziona nulla
             if (selectedItems.length === 0) {
                 alert("Seleziona tutte le immagini corrispondenti.");
                 return;
             }
 
-            // Mostra la rotellina di caricamento (finge di elaborare la risposta corretta)
+            // Caricamento fittizio
             const spinner = document.getElementById('loading-spinner');
             spinner.style.display = 'flex';
 
-            // Dopo 1.5 secondi finge che la risposta sia valida ma richiede un'ulteriore verifica (Loop Infinito)
             setTimeout(() => {
                 spinner.style.display = 'none';
                 
-                // Passa alla sfida successiva in loop infinito
+                // 1. Chiude il pop-up del captcha
+                document.getElementById('captcha-modal').style.display = 'none';
+                
+                // 2. Resetta la spunta della casella iniziale (ritorna da capo)
+                const checkbox = document.getElementById('main-checkbox');
+                checkbox.checked = false;
+
+                // 3. Prepara la prossima sfida per la prossima volta che clicca
                 currentChallengeIndex = (currentChallengeIndex + 1) % challenges.length;
-                loadChallenge();
-            }, 1500);
+            }, 1200);
         }
     </script>
 
