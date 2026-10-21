@@ -68,19 +68,213 @@
             line-height: 1.4;
         }
 
-        .captcha-container {
+        /* Stile finto box reCAPTCHA */
+        .fake-recaptcha {
+            background: #f9f9f9;
+            border: 1px solid #d3d3d3;
+            border-radius: 3px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 304px;
+            margin: 0 auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .fake-recaptcha label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            gap: 12px;
+        }
+
+        .fake-recaptcha input[type="checkbox"] {
+            width: 28px;
+            height: 28px;
+            accent-color: #1a73e8;
+            cursor: pointer;
+        }
+
+        .fake-recaptcha span {
+            color: #000;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .recaptcha-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #555;
+        }
+
+        .recaptcha-brand img {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Finestra Modale (Popup Griglia Immagini) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background-color: #ffffff;
+            color: #000;
+            width: 400px;
+            border-radius: 4px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            background-color: #1a73e8;
+            color: white;
+            padding: 16px 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 15px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .modal-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            background-color: #fff;
+            padding: 4px;
+            position: relative;
+            min-height: 300px;
+        }
+
+        .grid-item {
+            position: relative;
+            height: 125px;
+            background-color: #ddd;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .grid-item.selected::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 4px solid #1a73e8;
+            background-color: rgba(26, 115, 232, 0.2);
+        }
+
+        .grid-item.selected::before {
+            content: "✓";
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #1a73e8;
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
-            min-height: 78px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: #fff;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .modal-icons {
+            display: flex;
+            gap: 16px;
+            color: #666;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .verify-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .verify-btn:hover {
+            background-color: #1557b0;
+        }
+
+        /* Schermata di caricamento fittizia */
+        .loading-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1a73e8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <!-- Area Anteprima Video Bloccato -->
+        <!-- Anteprima Video -->
         <div class="video-placeholder">
             <svg viewBox="0 0 24 24">
                 <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3 3.1-3 1.71 0 3.1 1.29 3.1 3v2z"/>
@@ -89,31 +283,129 @@
         </div>
 
         <h2>Verifica di Sicurezza</h2>
-        <p>Completa il reCAPTCHA sottostante per verificare che sei un utente reale e accedere alla riproduzione del video.</p>
+        <p>Completa il controllo per sbloccare la riproduzione del video.</p>
 
-        <!-- Widget Google reCAPTCHA v2 -->
-        <div class="captcha-container">
-            <div class="g-recaptcha" 
-                 data-sitekey="6Lfl8PktAAAAACRqUO6XuIW1btN_jlHj_mymPKei" 
-                 data-theme="dark" 
-                 data-callback="riavviaLoop">
+        <!-- Widget reCAPTCHA finto -->
+        <div class="fake-recaptcha">
+            <label>
+                <input type="checkbox" id="main-checkbox" onclick="openCaptchaModal(event)">
+                <span>Non sono un robot</span>
+            </label>
+            <div class="recaptcha-brand">
+                <svg width="28" height="28" viewBox="0 0 32 32">
+                    <path fill="#4285F4" d="M16 2.5c7.5 0 13.5 6 13.5 13.5s-6 13.5-13.5 13.5S2.5 23.5 2.5 16 8.5 2.5 16 2.5z"/>
+                    <path fill="#FFF" d="M13.5 21.5l-6-6 1.4-1.4 4.6 4.6 11-11 1.4 1.4z"/>
+                </svg>
+                <span style="font-size:9px; color:#777;">reCAPTCHA</span>
             </div>
         </div>
     </div>
 
-    <!-- Script API di Google reCAPTCHA -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Modale della Griglia -->
+    <div class="modal-overlay" id="captcha-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Seleziona tutte le immagini con</h3>
+                <h1 id="challenge-target">semafori</h1>
+            </div>
+            
+            <div class="modal-grid" id="image-grid">
+                <!-- Overlay caricamento -->
+                <div class="loading-overlay" id="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+                <!-- Le 9 immagini della griglia verranno generate via JS -->
+            </div>
 
-    <!-- Script JS per gestire il reset infinito -->
+            <div class="modal-footer">
+                <div class="modal-icons">
+                    🔄 🎧 ℹ️
+                </div>
+                <button class="verify-btn" onclick="verifyChallenge()">Verifica</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function riavviaLoop(token) {
-            // Non appena l'utente completa le immagini e ottiene il segno di spunta verde,
-            // aspettiamo 1 secondo prima di azzerare nuovamente il widget.
-            setTimeout(function() {
-                if (typeof grecaptcha !== 'undefined') {
-                    grecaptcha.reset();
-                }
-            }, 1000);
+        const challenges = [
+            { target: "semafori", images: [
+                "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=300&auto=format&fit=crop&q=60"
+            ]},
+            { target: "autobus", images: [
+                "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1563720223185-11003d516935?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1557223562-6c77ef1ae2af?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1506015391300-4802dc74de2e?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1494515843206-f3117d3f51b7?w=300&auto=format&fit=crop&q=60"
+            ]},
+            { target: "biciclette", images: [
+                "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1511994298241-608e28f14fde?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=300&auto=format&fit=crop&q=60",
+                "https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=300&auto=format&fit=crop&q=60"
+            ]}
+        ];
+
+        let currentChallengeIndex = 0;
+
+        function openCaptchaModal(event) {
+            event.preventDefault(); // Evita il check immediato nativo
+            document.getElementById('captcha-modal').style.display = 'flex';
+            loadChallenge();
+        }
+
+        function loadChallenge() {
+            const grid = document.getElementById('image-grid');
+            const targetText = document.getElementById('challenge-target');
+            
+            // Rimuove i vecchi elementi griglia eccetto il loading
+            const items = grid.querySelectorAll('.grid-item');
+            items.forEach(item => item.remove());
+
+            const challenge = challenges[currentChallengeIndex];
+            targetText.innerText = challenge.target;
+
+            // Crea le 9 caselle con immagini
+            challenge.images.forEach((imgUrl, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'grid-item';
+                cell.innerHTML = `<img src="${imgUrl}" alt="Captcha item">`;
+                cell.onclick = () => {
+                    cell.classList.toggle('selected');
+                };
+                grid.appendChild(cell);
+            });
+        }
+
+        function verifyChallenge() {
+            const spinner = document.getElementById('loading-spinner');
+            spinner.style.display = 'flex';
+
+            // Simula elaborazione di Google per 1.5 secondi
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                
+                // Passa alla sfida successiva in loop infinito
+                currentChallengeIndex = (currentChallengeIndex + 1) % challenges.length;
+                loadChallenge();
+            }, 1500);
         }
     </script>
 
