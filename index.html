@@ -380,10 +380,11 @@
             }
         ];
 
-        let currentChallengeIndex = 0;
+        // Legge l'indice corrente dalla memoria del browser o parte da 0
+        let currentChallengeIndex = parseInt(localStorage.getItem('captcha_index') || '0', 10);
 
         function openCaptchaModal(event) {
-            event.preventDefault(); // Impedisce il check immediato
+            event.preventDefault();
             document.getElementById('captcha-modal').style.display = 'flex';
             loadChallenge();
         }
@@ -392,14 +393,12 @@
             const grid = document.getElementById('image-grid');
             const targetText = document.getElementById('challenge-target');
             
-            // Pulizia vecchi elementi
             const items = grid.querySelectorAll('.grid-item');
             items.forEach(item => item.remove());
 
             const challenge = challenges[currentChallengeIndex];
             targetText.innerText = challenge.target;
 
-            // Generazione 9 immagini
             challenge.images.forEach((imgUrl) => {
                 const cell = document.createElement('div');
                 cell.className = 'grid-item';
@@ -415,28 +414,22 @@
             const grid = document.getElementById('image-grid');
             const selectedItems = grid.querySelectorAll('.grid-item.selected');
 
-            // Avviso se non seleziona nulla
             if (selectedItems.length === 0) {
                 alert("Seleziona tutte le immagini corrispondenti.");
                 return;
             }
 
-            // Caricamento fittizio
+            // Mostra la rotellina
             const spinner = document.getElementById('loading-spinner');
             spinner.style.display = 'flex';
 
             setTimeout(() => {
-                spinner.style.display = 'none';
+                // Calcola la prossima sfida e salvala
+                const nextIndex = (currentChallengeIndex + 1) % challenges.length;
+                localStorage.setItem('captcha_index', nextIndex);
                 
-                // 1. Chiude il pop-up del captcha
-                document.getElementById('captcha-modal').style.display = 'none';
-                
-                // 2. Resetta la spunta della casella iniziale (ritorna da capo)
-                const checkbox = document.getElementById('main-checkbox');
-                checkbox.checked = false;
-
-                // 3. Prepara la prossima sfida per la prossima volta che clicca
-                currentChallengeIndex = (currentChallengeIndex + 1) % challenges.length;
+                // Ricarica la pagina da zero come se fosse appena aperta
+                location.reload();
             }, 1200);
         }
     </script>
