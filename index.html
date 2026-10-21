@@ -240,7 +240,7 @@
             background-color: #1557b0;
         }
 
-        /* Schermata di caricamento fittizia */
+        /* Overlay di caricamento */
         .loading-overlay {
             display: none;
             position: absolute;
@@ -296,7 +296,7 @@
         </div>
     </div>
 
-    <!-- Modale della Griglia -->
+    <!-- Modale Pop-up con Griglia -->
     <div class="modal-overlay" id="captcha-modal">
         <div class="modal-box">
             <div class="modal-header">
@@ -305,7 +305,6 @@
             </div>
             
             <div class="modal-grid" id="image-grid">
-                <!-- Overlay caricamento -->
                 <div class="loading-overlay" id="loading-spinner">
                     <div class="spinner"></div>
                 </div>
@@ -380,8 +379,7 @@
             }
         ];
 
-        // Legge l'indice corrente dalla memoria del browser o parte da 0
-        let currentChallengeIndex = parseInt(localStorage.getItem('captcha_index') || '0', 10);
+        let currentChallengeIndex = 0;
 
         function openCaptchaModal(event) {
             event.preventDefault();
@@ -393,12 +391,14 @@
             const grid = document.getElementById('image-grid');
             const targetText = document.getElementById('challenge-target');
             
+            // Pulisce le immagini precedenti
             const items = grid.querySelectorAll('.grid-item');
             items.forEach(item => item.remove());
 
             const challenge = challenges[currentChallengeIndex];
             targetText.innerText = challenge.target;
 
+            // Inserisce le nuove immagini
             challenge.images.forEach((imgUrl) => {
                 const cell = document.createElement('div');
                 cell.className = 'grid-item';
@@ -414,22 +414,28 @@
             const grid = document.getElementById('image-grid');
             const selectedItems = grid.querySelectorAll('.grid-item.selected');
 
+            // Richiede all'utente di selezionare almeno una casella
             if (selectedItems.length === 0) {
                 alert("Seleziona tutte le immagini corrispondenti.");
                 return;
             }
 
-            // Mostra la rotellina
+            // Mostra il caricamento fittizio
             const spinner = document.getElementById('loading-spinner');
             spinner.style.display = 'flex';
 
             setTimeout(() => {
-                // Calcola la prossima sfida e salvala
-                const nextIndex = (currentChallengeIndex + 1) % challenges.length;
-                localStorage.setItem('captcha_index', nextIndex);
+                spinner.style.display = 'none';
                 
-                // Ricarica la pagina da zero come se fosse appena aperta
-                location.reload();
+                // 1. Chiude la modale con le immagini
+                document.getElementById('captcha-modal').style.display = 'none';
+                
+                // 2. Resetta la casella "Non sono un robot" rendendola vuota
+                const checkbox = document.getElementById('main-checkbox');
+                checkbox.checked = false;
+
+                // 3. Prepara la prossima domanda per il prossimo click
+                currentChallengeIndex = (currentChallengeIndex + 1) % challenges.length;
             }, 1200);
         }
     </script>
