@@ -16,10 +16,39 @@
             background-color: #0f0f0f;
             color: #f1f1f1;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+        }
+
+        .art-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            border-bottom: 1px solid #383838;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: #ccc;
+            z-index: 2000;
+        }
+
+        .art-banner button {
+            background: transparent;
+            border: 1px solid #666;
+            color: #eee;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
         }
 
         .card {
@@ -31,6 +60,7 @@
             max-width: 440px;
             text-align: center;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            margin-top: 60px;
         }
 
         .video-placeholder {
@@ -68,7 +98,6 @@
             line-height: 1.4;
         }
 
-        /* Stile finto box reCAPTCHA */
         .fake-recaptcha {
             background: #f9f9f9;
             border: 1px solid #d3d3d3;
@@ -78,6 +107,7 @@
             align-items: center;
             justify-content: space-between;
             width: 304px;
+            max-width: 100%;
             margin: 0 auto;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
@@ -110,7 +140,6 @@
             color: #555;
         }
 
-        /* Finestra Modale (Popup) */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -128,6 +157,7 @@
             background-color: #ffffff;
             color: #000;
             width: 400px;
+            max-width: 95%;
             border-radius: 4px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.3);
             overflow: hidden;
@@ -207,55 +237,6 @@
             z-index: 2;
         }
 
-        /* Stili per il test delle parole colorate */
-        .color-test-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 20px;
-            min-height: 300px;
-            background-color: #fff;
-            position: relative;
-        }
-
-        .color-display-word {
-            font-size: 36px;
-            font-weight: 900;
-            margin-bottom: 25px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .color-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            width: 100%;
-        }
-
-        .color-option-btn {
-            padding: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            border: 2px solid #ccc;
-            border-radius: 6px;
-            background-color: #f8f9fa;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .color-option-btn:hover {
-            background-color: #e9ecef;
-            border-color: #1a73e8;
-        }
-
-        .color-option-btn.selected {
-            border-color: #1a73e8;
-            background-color: rgba(26, 115, 232, 0.1);
-            color: #1a73e8;
-        }
-
         .modal-footer {
             display: flex;
             justify-content: space-between;
@@ -270,7 +251,6 @@
             gap: 16px;
             color: #666;
             font-size: 18px;
-            cursor: pointer;
         }
 
         .verify-btn {
@@ -289,12 +269,11 @@
             background-color: #1557b0;
         }
 
-        /* Overlay di caricamento */
         .loading-overlay {
             display: none;
             position: absolute;
             inset: 0;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.85);
             justify-content: center;
             align-items: center;
             z-index: 10;
@@ -317,8 +296,12 @@
 </head>
 <body>
 
-    <div class="card">
-        <!-- Anteprima Video -->
+    <div class="art-banner">
+        <span>Opera d'arte in mostra. Ogni attesa è intenzionale.</span>
+        <button onclick="exitArt()">Esci dall'opera</button>
+    </div>
+
+    <div class="card" id="main-card">
         <div class="video-placeholder">
             <svg viewBox="0 0 24 24">
                 <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3 3.1-3 1.71 0 3.1 1.29 3.1 3v2z"/>
@@ -329,7 +312,6 @@
         <h2>Verifica di Sicurezza</h2>
         <p>Completa il controllo per sbloccare la riproduzione del video.</p>
 
-        <!-- Widget reCAPTCHA finto -->
         <div class="fake-recaptcha">
             <label>
                 <input type="checkbox" id="main-checkbox" onclick="openCaptchaModal(event)">
@@ -345,16 +327,18 @@
         </div>
     </div>
 
-    <!-- Modale Pop-up con Griglia o Test -->
     <div class="modal-overlay" id="captcha-modal">
         <div class="modal-box">
             <div class="modal-header">
                 <h3>Seleziona tutte le immagini con</h3>
                 <h1 id="challenge-target">semafori</h1>
             </div>
-            
-            <!-- Area Contenuto Dinamico (Griglia immagini o Test parole) -->
-            <div id="modal-content-area"></div>
+
+            <div class="modal-grid" id="image-grid">
+                <div class="loading-overlay" id="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+            </div>
 
             <div class="modal-footer">
                 <div class="modal-icons">
@@ -366,10 +350,13 @@
     </div>
 
     <script>
+        const WAIT_MIN = 8000;   // attesa minima in millisecondi
+        const WAIT_MAX = 25000;  // attesa massima in millisecondi
+        const COLOR_ROUND_EVERY = 5; // ogni quanti round compare il test colori
+
         const challenges = [
-            { 
-                type: "grid",
-                target: "semafori", 
+            {
+                target: "semafori",
                 images: [
                     "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=300&auto=format&fit=crop&q=60",
                     "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&auto=format&fit=crop&q=60",
@@ -382,17 +369,8 @@
                     "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=300&auto=format&fit=crop&q=60"
                 ]
             },
-            { 
-                type: "color-test",
-                target: "Seleziona il COLORE con cui è scritta la parola",
-                word: "ROSSO",
-                wordColor: "#0056b3", // Scritto in blu
-                colorName: "Blu",
-                options: ["Rosso", "Blu", "Verde", "Giallo"]
-            },
-            { 
-                type: "grid",
-                target: "autobus", 
+            {
+                target: "autobus",
                 images: [
                     "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=300&auto=format&fit=crop&q=60",
                     "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&auto=format&fit=crop&q=60",
@@ -405,17 +383,8 @@
                     "https://images.unsplash.com/photo-1494515843206-f3117d3f51b7?w=300&auto=format&fit=crop&q=60"
                 ]
             },
-            { 
-                type: "color-test",
-                target: "Seleziona il COLORE con cui è scritta la parola",
-                word: "VERDE",
-                wordColor: "#28a745", // Scritto in verde
-                colorName: "Verde",
-                options: ["Rosso", "Blu", "Verde", "Giallo"]
-            },
-            { 
-                type: "grid",
-                target: "biciclette", 
+            {
+                target: "biciclette",
                 images: [
                     "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=300&auto=format&fit=crop&q=60",
                     "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=300&auto=format&fit=crop&q=60",
@@ -427,11 +396,35 @@
                     "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=300&auto=format&fit=crop&q=60",
                     "https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=300&auto=format&fit=crop&q=60"
                 ]
+            },
+            {
+                target: "strisce pedonali",
+                images: [
+                    "https://images.unsplash.com/photo-1572947517617-37a6b744b11f?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1508672019048-8055876b63e2?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=300&auto=format&fit=crop&q=60"
+                ]
             }
         ];
 
-        let currentChallengeIndex = 0;
-        let selectedColorOption = null;
+        const COLOR_WORDS = [
+            { word: "ROSSO", color: "#1a73e8" },
+            { word: "VERDE", color: "#d93025" },
+            { word: "GIALLO", color: "#188038" },
+            { word: "BLU", color: "#f9ab00" },
+            { word: "ROSSO", color: "#188038" },
+            { word: "BLU", color: "#d93025" },
+            { word: "VERDE", color: "#1a73e8" },
+            { word: "GIALLO", color: "#1a73e8" }
+        ];
+
+        let roundCounter = 0;
 
         function openCaptchaModal(event) {
             event.preventDefault();
@@ -439,95 +432,79 @@
             loadChallenge();
         }
 
-        function loadChallenge() {
-            const contentArea = document.getElementById('modal-content-area');
-            const targetHeader = document.getElementById('challenge-target');
-            const challenge = challenges[currentChallengeIndex];
-
-            if (challenge.type === "grid") {
-                targetHeader.innerText = challenge.target;
-                contentArea.innerHTML = `
-                    <div class="modal-grid" id="image-grid">
-                        <div class="loading-overlay" id="loading-spinner">
-                            <div class="spinner"></div>
-                        </div>
-                    </div>
-                `;
-                const grid = document.getElementById('image-grid');
-                challenge.images.forEach((imgUrl) => {
-                    const cell = document.createElement('div');
-                    cell.className = 'grid-item';
-                    cell.innerHTML = `<img src="${imgUrl}" alt="Captcha item">`;
-                    cell.onclick = () => {
-                        cell.classList.toggle('selected');
-                    };
-                    grid.appendChild(cell);
-                });
-            } else if (challenge.type === "color-test") {
-                selectedColorOption = null;
-                targetHeader.innerText = challenge.target;
-                
-                let optionsHtml = challenge.options.map(opt => `
-                    <button class="color-option-btn" onclick="selectColorOption(this, '${opt}')">${opt}</button>
-                `).join('');
-
-                contentArea.innerHTML = `
-                    <div class="color-test-container">
-                        <div class="loading-overlay" id="loading-spinner">
-                            <div class="spinner"></div>
-                        </div>
-                        <div class="color-display-word" style="color: ${challenge.wordColor};">${challenge.word}</div>
-                        <div class="color-options">
-                            ${optionsHtml}
-                        </div>
-                    </div>
-                `;
-            }
+        function clearGrid() {
+            document.getElementById('image-grid')
+                .querySelectorAll('.grid-item')
+                .forEach(item => item.remove());
         }
 
-        function selectColorOption(button, colorName) {
-            const buttons = document.querySelectorAll('.color-option-btn');
-            buttons.forEach(btn => btn.classList.remove('selected'));
-            button.classList.add('selected');
-            selectedColorOption = colorName;
+        function loadChallenge() {
+            clearGrid();
+
+            if ((roundCounter + 1) % COLOR_ROUND_EVERY === 0) {
+                loadColorWords();
+                return;
+            }
+
+            const grid = document.getElementById('image-grid');
+            const challenge = challenges[roundCounter % challenges.length];
+            document.getElementById('challenge-target').innerText = challenge.target;
+
+            challenge.images.forEach((imgUrl) => {
+                const cell = document.createElement('div');
+                cell.className = 'grid-item';
+                cell.innerHTML = `<img src="${imgUrl}" alt="Captcha item">`;
+                cell.onclick = () => cell.classList.toggle('selected');
+                grid.appendChild(cell);
+            });
+        }
+
+        function loadColorWords() {
+            const grid = document.getElementById('image-grid');
+            document.getElementById('challenge-target').innerText = "il colore del testo";
+
+            COLOR_WORDS.forEach(({ word, color }) => {
+                const cell = document.createElement('div');
+                cell.className = 'grid-item';
+                cell.style.display = 'flex';
+                cell.style.alignItems = 'center';
+                cell.style.justifyContent = 'center';
+                cell.style.background = '#fff';
+                cell.style.color = color;
+                cell.style.fontWeight = '700';
+                cell.style.fontSize = '22px';
+                cell.textContent = word;
+                cell.onclick = () => cell.classList.toggle('selected');
+                grid.appendChild(cell);
+            });
         }
 
         function verifyChallenge() {
-            const challenge = challenges[currentChallengeIndex];
+            const grid = document.getElementById('image-grid');
+            const selectedItems = grid.querySelectorAll('.grid-item.selected');
 
-            if (challenge.type === "grid") {
-                const grid = document.getElementById('image-grid');
-                if (grid) {
-                    const selectedItems = grid.querySelectorAll('.grid-item.selected');
-                    if (selectedItems.length === 0) {
-                        alert("Seleziona tutte le immagini corrispondenti.");
-                        return;
-                    }
-                }
-            } else if (challenge.type === "color-test") {
-                if (!selectedColorOption) {
-                    alert("Seleziona un'opzione di colore.");
-                    return;
-                }
+            if (selectedItems.length === 0) {
+                alert("Seleziona tutte le immagini corrispondenti.");
+                return;
             }
 
-            // Mostra il caricamento fittizio (3.5 secondi)
             const spinner = document.getElementById('loading-spinner');
-            if (spinner) spinner.style.display = 'flex';
+            spinner.style.display = 'flex';
+
+            const delay = WAIT_MIN + Math.random() * (WAIT_MAX - WAIT_MIN);
 
             setTimeout(() => {
-                if (spinner) spinner.style.display = 'none';
-                
-                // 1. Chiude la modale
+                spinner.style.display = 'none';
                 document.getElementById('captcha-modal').style.display = 'none';
-                
-                // 2. Resetta la casella "Non sono un robot"
-                const checkbox = document.getElementById('main-checkbox');
-                checkbox.checked = false;
+                document.getElementById('main-checkbox').checked = false;
+                roundCounter++;
+            }, delay);
+        }
 
-                // 3. Passa ciclicamente alla sfida successiva
-                currentChallengeIndex = (currentChallengeIndex + 1) % challenges.length;
-            }, 3500);
+        function exitArt() {
+            document.getElementById('captcha-modal').style.display = 'none';
+            document.getElementById('main-card').innerHTML =
+                '<h2>Grazie per aver partecipato</h2><p>Puoi chiudere questa finestra.</p>';
         }
     </script>
 
