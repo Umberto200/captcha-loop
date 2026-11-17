@@ -354,13 +354,7 @@
             </div>
             
             <!-- Area Contenuto Dinamico (Griglia immagini o Test parole) -->
-            <div id="modal-content-area">
-                <div class="modal-grid" id="image-grid">
-                    <div class="loading-overlay" id="loading-spinner">
-                        <div class="spinner"></div>
-                    </div>
-                </div>
-            </div>
+            <div id="modal-content-area"></div>
 
             <div class="modal-footer">
                 <div class="modal-icons">
@@ -377,4 +371,165 @@
                 type: "grid",
                 target: "semafori", 
                 images: [
-                    "https
+                    "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=300&auto=format&fit=crop&q=60"
+                ]
+            },
+            { 
+                type: "color-test",
+                target: "Seleziona il COLORE con cui è scritta la parola",
+                word: "ROSSO",
+                wordColor: "#0056b3", // Scritto in blu
+                colorName: "Blu",
+                options: ["Rosso", "Blu", "Verde", "Giallo"]
+            },
+            { 
+                type: "grid",
+                target: "autobus", 
+                images: [
+                    "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1563720223185-11003d516935?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1557223562-6c77ef1ae2af?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1506015391300-4802dc74de2e?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1494515843206-f3117d3f51b7?w=300&auto=format&fit=crop&q=60"
+                ]
+            },
+            { 
+                type: "color-test",
+                target: "Seleziona il COLORE con cui è scritta la parola",
+                word: "VERDE",
+                wordColor: "#28a745", // Scritto in verde
+                colorName: "Verde",
+                options: ["Rosso", "Blu", "Verde", "Giallo"]
+            },
+            { 
+                type: "grid",
+                target: "biciclette", 
+                images: [
+                    "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1511994298241-608e28f14fde?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=300&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=300&auto=format&fit=crop&q=60"
+                ]
+            }
+        ];
+
+        let currentChallengeIndex = 0;
+        let selectedColorOption = null;
+
+        function openCaptchaModal(event) {
+            event.preventDefault();
+            document.getElementById('captcha-modal').style.display = 'flex';
+            loadChallenge();
+        }
+
+        function loadChallenge() {
+            const contentArea = document.getElementById('modal-content-area');
+            const targetHeader = document.getElementById('challenge-target');
+            const challenge = challenges[currentChallengeIndex];
+
+            if (challenge.type === "grid") {
+                targetHeader.innerText = challenge.target;
+                contentArea.innerHTML = `
+                    <div class="modal-grid" id="image-grid">
+                        <div class="loading-overlay" id="loading-spinner">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                `;
+                const grid = document.getElementById('image-grid');
+                challenge.images.forEach((imgUrl) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-item';
+                    cell.innerHTML = `<img src="${imgUrl}" alt="Captcha item">`;
+                    cell.onclick = () => {
+                        cell.classList.toggle('selected');
+                    };
+                    grid.appendChild(cell);
+                });
+            } else if (challenge.type === "color-test") {
+                selectedColorOption = null;
+                targetHeader.innerText = challenge.target;
+                
+                let optionsHtml = challenge.options.map(opt => `
+                    <button class="color-option-btn" onclick="selectColorOption(this, '${opt}')">${opt}</button>
+                `).join('');
+
+                contentArea.innerHTML = `
+                    <div class="color-test-container">
+                        <div class="loading-overlay" id="loading-spinner">
+                            <div class="spinner"></div>
+                        </div>
+                        <div class="color-display-word" style="color: ${challenge.wordColor};">${challenge.word}</div>
+                        <div class="color-options">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function selectColorOption(button, colorName) {
+            const buttons = document.querySelectorAll('.color-option-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            selectedColorOption = colorName;
+        }
+
+        function verifyChallenge() {
+            const challenge = challenges[currentChallengeIndex];
+
+            if (challenge.type === "grid") {
+                const grid = document.getElementById('image-grid');
+                if (grid) {
+                    const selectedItems = grid.querySelectorAll('.grid-item.selected');
+                    if (selectedItems.length === 0) {
+                        alert("Seleziona tutte le immagini corrispondenti.");
+                        return;
+                    }
+                }
+            } else if (challenge.type === "color-test") {
+                if (!selectedColorOption) {
+                    alert("Seleziona un'opzione di colore.");
+                    return;
+                }
+            }
+
+            // Mostra il caricamento fittizio (3.5 secondi)
+            const spinner = document.getElementById('loading-spinner');
+            if (spinner) spinner.style.display = 'flex';
+
+            setTimeout(() => {
+                if (spinner) spinner.style.display = 'none';
+                
+                // 1. Chiude la modale
+                document.getElementById('captcha-modal').style.display = 'none';
+                
+                // 2. Resetta la casella "Non sono un robot"
+                const checkbox = document.getElementById('main-checkbox');
+                checkbox.checked = false;
+
+                // 3. Passa ciclicamente alla sfida successiva
+                currentChallengeIndex = (currentChallengeIndex + 1) % challenges.length;
+            }, 3500);
+        }
+    </script>
+
+</body>
+</html>
